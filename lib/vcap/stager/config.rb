@@ -41,7 +41,6 @@ class VCAP::Stager::Config < VCAP::Config
     config = super(*args)
 
     config[:dirs] ||= {}
-    config[:dirs][:manifests] ||= StagingPlugin::DEFAULT_MANIFEST_ROOT
     config[:run_plugin_path]  ||= File.expand_path('../../../../bin/run_plugin', __FILE__)
     config[:ruby_path]        ||= `which ruby`.chomp
 

@@ -58,7 +58,7 @@ describe VCAP::Stager::Task do
       app_name = "sinatra_trivial"
       app_path = zip_app(@work_dir, app_name)
       request = create_request(app_name)
-      task = VCAP::Stager::Task.new(request)
+      task = VCAP::Stager::Task.new(request, {:manifest_root=> StagingPlugin.manifest_root})
 
       task.perform.should be_nil
 
@@ -67,7 +67,7 @@ describe VCAP::Stager::Task do
   end
 
   def expect_error(request, matcher)
-    task = VCAP::Stager::Task.new(request)
+    task = VCAP::Stager::Task.new(request, {:manifest_root=> StagingPlugin.manifest_root})
     expect do
       task.perform
     end.to raise_error(matcher)
