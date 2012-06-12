@@ -29,7 +29,7 @@ class VCAP::Stager::Task
     @request      = request
     @user_manager = opts[:secure_user_manager]
     @runner       = opts[:runner] || VCAP::Stager::ProcessRunner.new(@logger)
-    @manifest_dir = opts[:manifest_root] || StagingPlugin::DEFAULT_MANIFEST_ROOT
+    @manifest_dir = opts[:manifest_root]
     @ruby_path    = opts[:ruby_path] || "ruby"
     @run_plugin_path = opts[:run_plugin_path] || RUN_PLUGIN_PATH
     @max_staging_duration = opts[:max_staging_duration] || MAX_STAGING_DURATION

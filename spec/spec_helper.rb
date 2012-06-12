@@ -22,33 +22,33 @@ VCAP::Logging.setup_from_config({:level => :debug2}) if ENV['VCAP_TEST_LOG'] == 
 RSpec.configure do |config|
   config.before(:all) do
     begin
-      VCAP::Subprocess.run("cp -a #{File.join(StagingPlugin::DEFAULT_MANIFEST_ROOT, 'sinatra.yml')} #{STAGING_TEMP}")
-      if ENV["VCAP_RUNTIME_RUBY18"] && ENV["VCAP_RUNTIME_RUBY18_VER"] then
-        sinatra_manifest = {
+      ruby18_version =  ENV["VCAP_RUNTIME_RUBY18_VER"] || "1.8.7"
+      ruby18_exec =  ENV["VCAP_RUNTIME_RUBY18"] || "/usr/bin/ruby"
+      runtimes = {
+          'ruby18' => {
+             'version' => ruby18_version,
+             'executable'=> ruby18_exec
+        }
+      }
+      File.open(File.join(STAGING_TEMP, "runtimes.yml"), "w") do |file|
+        YAML.dump runtimes, file
+      end
+      sinatra_manifest = {
           'name' => "sinatra",
           'runtimes' => [
             'ruby18' => {
-              'version' => ENV["VCAP_RUNTIME_RUBY18_VER"],
-              'executable' => ENV["VCAP_RUNTIME_RUBY18"],
+              'default' => true
             },
           ],
           'detection' => [
             {'*.rb' => "require 'sinatra'|require \"sinatra\""},
           ],
-        }
-        File.open(File.join(STAGING_TEMP, "sinatra.yml"), "w") do |file|
-          YAML.dump sinatra_manifest, file
-        end
+      }
+      File.open(File.join(STAGING_TEMP, "sinatra.yml"), "w") do |file|
+        YAML.dump sinatra_manifest, file
       end
-    rescue VCAP::SubprocessStatusError => e
-      puts "Unable to copy staging manifests. Permissions problem?"
-      puts "#{e}"
-      puts "STDOUT:"
-      puts e.stdout
-      puts "STDERR"
-      puts e.stderr
     rescue => e
-      puts "Unable to copy staging manifests. Permissions problem?"
+      puts "Unable to write staging manifests. Permissions problem?"
       puts "#{e}"
     end
     File.open(File.join(STAGING_TEMP, 'platform.yml'), 'wb') do |f|
