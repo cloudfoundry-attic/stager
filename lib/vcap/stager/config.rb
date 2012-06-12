@@ -24,7 +24,6 @@ class VCAP::Stager::Config < VCAP::Config
       :queues                => [String],   # List of queues to pull tasks from
       :pid_filename          => String,     # Pid filename to use
       optional(:dirs) => {
-        optional(:manifests) => String,     # Where all of the staging manifests live
         optional(:tmp)       => String,     # Default is /tmp
       },
 
@@ -41,7 +40,6 @@ class VCAP::Stager::Config < VCAP::Config
     config = super(*args)
 
     config[:dirs] ||= {}
-    config[:dirs][:manifests] ||= StagingPlugin::DEFAULT_MANIFEST_ROOT
     config[:run_plugin_path]  ||= File.expand_path('../../../../bin/run_plugin', __FILE__)
     config[:ruby_path]        ||= `which ruby`.chomp
 

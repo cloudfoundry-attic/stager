@@ -37,8 +37,9 @@ describe VCAP::Stager::Task do
 
       # Framework/runtime mismatch. Web.xml will not be found
       request = create_request(app_name,
-                               "framework" => "spring",
-                               "runtime"   => "java")
+                               "framework_info" => {"name" => "spring", "runtimes" => ["java" => {"default" => true}],
+                                               "detection" => [{"*.war" => true}]},
+                               "runtime_info"   => {"name" => "java", "version" => "1.6", "executable"=> "java"})
 
       expect_error(request, /Staging plugin failed/)
     end
@@ -74,11 +75,14 @@ describe VCAP::Stager::Task do
   end
 
   def create_request(app_name, app_props = {})
+    ruby18_version =  ENV["VCAP_RUNTIME_RUBY18_VER"] || "1.8.7"
+    ruby18_exec =  ENV["VCAP_RUNTIME_RUBY18"] || "/usr/bin/ruby"
     { "download_uri" => DummyHandler.app_download_uri(@http_server, app_name),
       "upload_uri" => DummyHandler.droplet_upload_uri(@http_server, app_name),
       "properties" => {
-        "framework" => "sinatra",
-        "runtime"   => "ruby18",
+        "framework_info" => {"name" => "sinatra", "runtimes" => ["ruby18" => {"default" => true}],
+                        "detection" => [{"*.rb" => "require 'sinatra'|require \"sinatra\""}]},
+        "runtime_info"   => {"name" => "ruby18", "version" => ruby18_version, "executable"=> ruby18_exec},
         "services"  => [{}],
         "resources" => {
           "memory" => 128,

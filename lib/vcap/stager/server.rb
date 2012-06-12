@@ -157,11 +157,6 @@ class VCAP::Stager::Server
       :run_plugin_path => server_config[:run_plugin_path],
       :secure_user_manager => user_manager,
     }
-
-    if server_config[:dirs]
-      task_config[:manifest_root] = server_config[:dirs][:manifests]
-    end
-
     task_config
   end
 end
