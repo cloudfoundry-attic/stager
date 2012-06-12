@@ -26,8 +26,8 @@ class VCAP::Stager::Spec::AppFixture
   # You must manually clean up the directory thus created.
   # If called with a block, yields the staged directory as a Pathname, and
   # automatically deletes it when the block returns.
-  def stage(framework, env = {})
-    plugin_klass = StagingPlugin.load_plugin_for(framework)
+  def stage(env = {})
+    plugin_klass = StagingPlugin.load_plugin_for(env[:framework]["name"])
     working_dir = Dir.mktmpdir("#{@name}-staged")
     stager = plugin_klass.new(source_dir, working_dir, env)
     stager.stage_application

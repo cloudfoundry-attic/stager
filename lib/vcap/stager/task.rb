@@ -29,7 +29,6 @@ class VCAP::Stager::Task
     @request      = request
     @user_manager = opts[:secure_user_manager]
     @runner       = opts[:runner] || VCAP::Stager::ProcessRunner.new(@logger)
-    @manifest_dir = opts[:manifest_root] || StagingPlugin::DEFAULT_MANIFEST_ROOT
     @ruby_path    = opts[:ruby_path] || "ruby"
     @run_plugin_path = opts[:run_plugin_path] || RUN_PLUGIN_PATH
     @max_staging_duration = opts[:max_staging_duration] || MAX_STAGING_DURATION
@@ -110,8 +109,7 @@ class VCAP::Stager::Task
     plugin_config = {
       "source_dir"   => src_dir,
       "dest_dir"     => dst_dir,
-      "environment"  => @request["properties"],
-      "manifest_dir" => @manifest_dir,
+      "environment"  => @request["properties"]
     }
 
     secure_user = nil
@@ -128,7 +126,7 @@ class VCAP::Stager::Task
     StagingPlugin::Config.to_file(plugin_config, plugin_config_file.path)
 
     cmd = [@ruby_path, @run_plugin_path,
-           @request["properties"]["framework"],
+           @request["properties"]["framework"]["name"],
            plugin_config_file.path].join(" ")
 
     res = @runner.run_logged(cmd,

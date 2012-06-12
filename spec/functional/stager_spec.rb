@@ -8,9 +8,12 @@ describe VCAP::Stager do
     @task_timeout = ENV['VCAP_TEST_TASK_TIMEOUT'] || 10
     # Set this to true if you want to save the output of each component
     @save_logs = ENV['VCAP_TEST_LOG'] == 'true'
+    ruby18_version =  ENV['VCAP_RUNTIME_RUBY18_VER'] || '1.8.7'
+    ruby18_exec =  ENV['VCAP_RUNTIME_RUBY18'] || '/usr/bin/ruby'
     @app_props = {
-      'framework'   => 'sinatra',
-      'runtime'     => 'ruby18',
+      'framework' => {'name' => "sinatra", 'runtimes' => ['ruby18' => {'default' => true}],
+                        'detection' => [{'*.rb' => "require 'sinatra'|require \"sinatra\""}]},
+      'runtime'   => {'name' => 'ruby18', 'version' => ruby18_version, 'executable'=> ruby18_exec},
       'services'    => [{}],
       'resources'   => {
         'memory'    => 128,
@@ -26,7 +29,6 @@ describe VCAP::Stager do
     @http_server  = start_http_server(@tmp_dirs[:http], @tmp_dirs)
     @nats_server  = start_nats(@tmp_dirs[:nats])
     @stager       = start_stager(@nats_server.port,
-                                 StagingPlugin.manifest_root,
                                  @tmp_dirs[:stager])
   end
 
@@ -77,8 +79,8 @@ describe VCAP::Stager do
     nats
   end
 
-  def start_stager(nats_port, manifest_dir, stager_dir)
-    stager = VCAP::Stager::Spec::ForkedStager.new(nats_port, manifest_dir, stager_dir)
+  def start_stager(nats_port, stager_dir)
+    stager = VCAP::Stager::Spec::ForkedStager.new(nats_port, stager_dir)
     ready = false
     NATS.start(:uri => "nats://127.0.0.1:#{nats_port}") do
       EM.add_timer(30) { EM.stop }
