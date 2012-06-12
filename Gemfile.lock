@@ -45,10 +45,10 @@ GIT
 
 GIT
   remote: https://github.com/cloudfoundry/vcap-staging.git
-  revision: 8d9da6cd9bb641225a12fcbcbf7a1db9ab06e844
-  ref: 8d9da6cd
+  revision: 1740e4daef7cb988f16375a4ec7b69392c5705ac
+  ref: 1740e4da
   specs:
-    vcap_staging (0.1.62)
+    vcap_staging (0.1.63)
       nokogiri (>= 1.4.4)
       rake
       rspec
@@ -112,6 +112,6 @@ DEPENDENCIES
   vcap-concurrency (~> 0.1.0)!
   vcap_common (= 2.0.0)!
   vcap_logging (>= 0.1.3)!
-  vcap_staging (~> 0.1.62)!
+  vcap_staging (~> 0.1.63)!
   webmock
   yajl-ruby (>= 0.7.9)
