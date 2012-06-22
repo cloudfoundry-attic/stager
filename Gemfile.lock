@@ -1,20 +1,22 @@
 GIT
-  remote: git://github.com/cloudfoundry/common.git
+  remote: https://github.com/cloudfoundry/common.git
   revision: b96ec1192d961925d91e17ca3831f8547489d918
+  ref: b96ec119
   specs:
     vcap_logging (1.0.2)
       rake
 
 GIT
-  remote: git://github.com/cloudfoundry/eventmachine.git
+  remote: https://github.com/cloudfoundry/eventmachine.git
   revision: 2806c630d8631d5dcf9fb2555f665b829052aabe
   branch: release-0.12.11-cf
   specs:
     eventmachine (0.12.11.cloudfoundry.3)
 
 GIT
-  remote: git://github.com/cloudfoundry/stager-client.git
+  remote: https://github.com/cloudfoundry/stager-client.git
   revision: fdaae720264e43cf7b1d068fcac27b005517d922
+  ref: fdaae720
   specs:
     stager-client (0.0.2)
       eventmachine
@@ -22,7 +24,7 @@ GIT
       yajl-ruby
 
 GIT
-  remote: git://github.com/cloudfoundry/vcap-common.git
+  remote: https://github.com/cloudfoundry/vcap-common.git
   revision: f6ffe9add54b55eaf428556147d61f3d64508cd8
   ref: f6ffe9ad
   specs:
@@ -34,13 +36,14 @@ GIT
       yajl-ruby (~> 0.8.3)
 
 GIT
-  remote: git://github.com/cloudfoundry/vcap-concurrency.git
+  remote: https://github.com/cloudfoundry/vcap-concurrency.git
   revision: be2bdb9f64a066f268d7537223ee24ae18e03cf7
+  ref: be2bdb9f
   specs:
     vcap-concurrency (0.1.0)
 
 GIT
-  remote: git://github.com/cloudfoundry/vcap-staging.git
+  remote: https://github.com/cloudfoundry/vcap-staging.git
   revision: 251cb526ea26961bfc46efdea7f8268510e32e25
   ref: 251cb526
   specs:
