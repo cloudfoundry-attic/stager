@@ -5,9 +5,9 @@ gem 'nats'
 gem 'rake'
 gem 'yajl-ruby', '>= 0.7.9'
 
-gem 'vcap_common', '~> 1.0.8', :git => 'https://github.com/cloudfoundry/vcap-common.git', :ref => 'f6ffe9ad'
+gem 'vcap_common', '2.0.0', :git => 'https://github.com/cloudfoundry/vcap-common.git'
 gem 'vcap_logging', '>= 0.1.3', :git => 'https://github.com/cloudfoundry/common.git', :ref => 'b96ec119'
-gem 'vcap_staging', '~> 0.1.60', :git => 'https://github.com/cloudfoundry/vcap-staging.git', :ref => '0b9a6c47'
+gem 'vcap_staging', '~> 0.1.61', :git => 'https://github.com/cloudfoundry/vcap-staging.git'
 gem 'vcap-concurrency', '~> 0.1.0', :git => 'https://github.com/cloudfoundry/vcap-concurrency.git', :ref => 'be2bdb9f'
 gem 'stager-client', '~> 0.0.2', :git => 'https://github.com/cloudfoundry/stager-client.git', :ref => 'fdaae720'
 

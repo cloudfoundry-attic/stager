@@ -1,6 +1,7 @@
 require 'yajl'
 
-require 'vcap/json_schema'
+require 'membrane'
+require 'vcap/common'
 
 module VCAP
   module Stager
@@ -10,9 +11,10 @@ module VCAP
     # state. All other errors thrown during VCAP::Stager::Task#perform will be
     # logged and re-raised (probably causing the program to crash).
     class TaskError < StandardError
-      SCHEMA = VCAP::JsonSchema.build do
-        { :class => String,
-          optional(:details) => String,
+      SCHEMA = Membrane::SchemaParser.parse do
+        {
+          :class => String,
+          optional(:details) => String
         }
       end
 
@@ -29,9 +31,10 @@ module VCAP
 
         def decode(enc_err)
           dec_err   = Yajl::Parser.parse(enc_err)
+          dec_err   = VCAP.symbolize_keys(dec_err)
           SCHEMA.validate(dec_err)
-          err_class = dec_err['class'].split('::').last
-          VCAP::Stager.const_get(err_class.to_sym).new(dec_err['details'])
+          err_class = dec_err[:class].split('::').last
+          VCAP::Stager.const_get(err_class.to_sym).new(dec_err[:details])
         end
       end
 
