@@ -1,5 +1,5 @@
 require 'vcap/config'
-require 'vcap/json_schema'
+require 'membrane'
 require 'vcap/staging/plugin/common'
 
 module VCAP
@@ -28,7 +28,7 @@ class VCAP::Stager::Config < VCAP::Config
         optional(:tmp)       => String,     # Default is /tmp
       },
 
-      :secure                => VCAP::JsonSchema::BoolSchema.new,
+      :secure                => bool,
 
       optional(:index)       => Integer,    # Component index (stager-0, stager-1, etc)
       optional(:ruby_path)   => String,     # Full path to the ruby executable that should execute the run plugin script

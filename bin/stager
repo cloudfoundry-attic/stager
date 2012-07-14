@@ -6,6 +6,7 @@ require 'bundler/setup'
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
+require 'membrane'
 require 'vcap/common'
 require 'vcap/component'
 require 'vcap/concurrency'
@@ -30,7 +31,7 @@ end.parse!
 
 begin
   config = VCAP::Stager::Config.from_file(config_file)
-rescue VCAP::JsonSchema::ValidationError => ve
+rescue Membrane::SchemaValidationError => ve
   puts "ERROR: There was a problem validating the supplied config: #{ve}"
   exit 1
 rescue => e

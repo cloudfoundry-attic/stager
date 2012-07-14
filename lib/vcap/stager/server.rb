@@ -2,7 +2,6 @@ require 'nats/client'
 require 'yajl'
 
 require 'vcap/component'
-require 'vcap/json_schema'
 require 'vcap/logging'
 
 require 'vcap/stager/task'

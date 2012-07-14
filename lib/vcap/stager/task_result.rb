@@ -1,6 +1,6 @@
 require 'yajl'
-
-require 'vcap/json_schema'
+require 'membrane'
+require 'vcap/common'
 
 module VCAP
   module Stager
@@ -8,7 +8,7 @@ module VCAP
 end
 
 class VCAP::Stager::TaskResult
-  SCHEMA = VCAP::JsonSchema.build do
+  SCHEMA = Membrane::SchemaParser.parse do
     { :task_id         => String,
       :task_log        => String,
       optional(:error) => String,
@@ -18,9 +18,10 @@ class VCAP::Stager::TaskResult
   class << self
     def decode(enc_res)
       dec_res = Yajl::Parser.parse(enc_res)
+      dec_res  = VCAP.symbolize_keys(dec_res)
       SCHEMA.validate(dec_res)
-      dec_res['error'] = VCAP::Stager::TaskError.decode(dec_res['error']) if dec_res['error']
-      VCAP::Stager::TaskResult.new(dec_res['task_id'], dec_res['task_log'], dec_res['error'])
+      dec_res[:error] = VCAP::Stager::TaskError.decode(dec_res[:error]) if dec_res[:error]
+      VCAP::Stager::TaskResult.new(dec_res[:task_id], dec_res[:task_log], dec_res[:error])
     end
   end
 
