@@ -26,6 +26,7 @@ GIT
 GIT
   remote: https://github.com/cloudfoundry/vcap-common.git
   revision: 5334b662238f14ed2ddbb80f524dcf8cdd0eaadf
+  ref: 5334b662
   specs:
     vcap_common (2.0.0)
       eventmachine
@@ -45,6 +46,7 @@ GIT
 GIT
   remote: https://github.com/cloudfoundry/vcap-staging.git
   revision: 910bda9fa69504fbe2202edceb8d0b7d1d253fb7
+  ref: 910bda9f
   specs:
     vcap_staging (0.1.61)
       nokogiri (>= 1.4.4)
