@@ -7,7 +7,7 @@ gem 'yajl-ruby', '>= 0.7.9'
 
 gem 'vcap_common', '2.0.0', :git => 'https://github.com/cloudfoundry/vcap-common.git', :ref => '5334b662'
 gem 'vcap_logging', '>= 0.1.3', :git => 'https://github.com/cloudfoundry/common.git', :ref => 'b96ec119'
-gem 'vcap_staging', '~> 0.1.62', :git => 'https://github.com/cloudfoundry/vcap-staging.git', :ref => '3a9a4639'
+gem 'vcap_staging', '~> 0.1.62', :git => 'https://github.com/cloudfoundry/vcap-staging.git', :ref => '74d89654'
 gem 'vcap-concurrency', '~> 0.1.0', :git => 'https://github.com/cloudfoundry/vcap-concurrency.git', :ref => 'be2bdb9f'
 gem 'stager-client', '~> 0.0.2', :git => 'https://github.com/cloudfoundry/stager-client.git', :ref => 'fdaae720'
 
