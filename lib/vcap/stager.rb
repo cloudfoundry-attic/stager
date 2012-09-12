@@ -18,9 +18,6 @@ module VCAP
       def init(config)
         @config = config
         VCAP::Logging.setup_from_config(config[:logging])
-        StagingPlugin.manifest_root = config[:dirs][:manifests]
-        StagingPlugin.load_all_manifests
-        StagingPlugin.validate_configuration!
       end
     end
   end
