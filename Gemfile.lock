@@ -45,8 +45,8 @@ GIT
 
 GIT
   remote: https://github.com/cloudfoundry/vcap-staging.git
-  revision: 2ad6cc83622933fc5a114e6a10af05010d2e4dfc
-  ref: 2ad6cc83
+  revision: 8f2fa00c86c81f08241759a833e2a612320872e2
+  ref: 8f2fa00c86
   specs:
     vcap_staging (0.1.63)
       nokogiri (>= 1.4.4)
