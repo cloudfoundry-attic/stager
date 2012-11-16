@@ -47,7 +47,10 @@ rescue => e
   exit 1
 end
 
-ENV['TMPDIR'] = config[:dirs][:tmp] if config[:dirs] && config[:dirs][:tmp]
+if config[:dirs] && config[:dirs][:tmp]
+  ENV['TMPDIR'] = config[:dirs][:tmp]
+  FileUtils.rm_rf(Dir.glob("#{config[:dirs][:tmp]}/*"))
+end
 
 VCAP::Stager.init(config)
 user_mgr=nil
