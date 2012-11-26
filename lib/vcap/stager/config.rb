@@ -1,6 +1,5 @@
 require 'vcap/config'
 require 'membrane'
-require 'vcap/staging/plugin/common'
 
 module VCAP
   module Stager
