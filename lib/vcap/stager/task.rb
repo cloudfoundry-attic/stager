@@ -8,7 +8,7 @@ require "vcap/stager/process_runner"
 require "vcap/stager/task_error"
 require "vcap/stager/task_logger"
 require "vcap/stager/workspace"
-require "vcap/staging/plugin/common"
+require "vcap/staging/plugin/staging_plugin"
 
 module VCAP
   module Stager
