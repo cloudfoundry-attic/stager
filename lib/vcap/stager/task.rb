@@ -157,7 +157,7 @@ class VCAP::Stager::Task
 
   def create_droplet(staged_dir, droplet_path)
     cmd = ["cd", staged_dir, "&&", "COPYFILE_DISABLE=true",
-           "tar", "-czf", droplet_path, "*"].join(" ")
+           "tar", "-czf", droplet_path, "."].join(" ")
 
     res = @runner.run_logged(cmd)
 
