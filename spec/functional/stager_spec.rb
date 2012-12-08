@@ -1,3 +1,4 @@
+require 'schemata/staging'
 require 'spec_helper'
 
 require 'vcap/spec/forked_component/nats_server'
@@ -10,11 +11,16 @@ describe VCAP::Stager do
     @save_logs = ENV['VCAP_TEST_LOG'] == 'true'
     ruby18_version =  ENV['VCAP_RUNTIME_RUBY18_VER'] || '1.8.7'
     ruby18_exec =  ENV['VCAP_RUNTIME_RUBY18'] || '/usr/bin/ruby'
+    @mock_object = Schemata::Staging.mock_message
     @app_props = {
+      'framework'      => @mock_object.properties['framework'],
       'framework_info' => {'name' => "sinatra", 'runtimes' => ['ruby18' => {'default' => true}],
                         'detection' => [{'*.rb' => "require 'sinatra'|require \"sinatra\""}]},
+      'runtime'        => @mock_object.properties['runtime'],
       'runtime_info'   => {'name' => 'ruby18', 'version' => ruby18_version, 'executable'=> ruby18_exec},
-      'services'    => [{}],
+      'services'    => [],
+      'meta'        => @mock_object.properties['meta'],
+      'environment' => @mock_object.properties['environment'],
       'resources'   => {
         'memory'    => 128,
         'disk'      => 1024,
@@ -50,11 +56,12 @@ describe VCAP::Stager do
       zip_app(@tmp_dirs[:download], app_name)
 
       request = {
-        "app_id"       => "zazzle",
+        "app_id"       => @mock_object.app_id,
         "properties"   => @app_props,
         "download_uri" => DummyHandler.app_download_uri(@http_server, app_name),
         "upload_uri"   => DummyHandler.droplet_upload_uri(@http_server, app_name),
       }
+      msg_obj = Schemata::Staging::Message::V1.new(request)
 
       task_result = wait_for_task_result(@nats_server.uri, request)
 
