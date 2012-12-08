@@ -1,4 +1,5 @@
 require "spec_helper"
+require "schemata/staging"
 
 describe VCAP::Stager::Task do
   describe "#perform" do
@@ -14,9 +15,8 @@ describe VCAP::Stager::Task do
 
     it "should raise an error if the download fails" do
       # Will 404
-      request = {
-        "download_uri" => DummyHandler.app_download_uri(@http_server, "fake")
-      }
+      request = Schemata::Staging.mock_message
+      request.download_uri = DummyHandler.app_download_uri(@http_server, "fake")
 
       expect_error(request, /Failed downloading/)
     end
@@ -50,7 +50,7 @@ describe VCAP::Stager::Task do
 
       request = create_request(app_name)
       # Auth will fail
-      request["upload_uri"] = "http://127.0.0.1:#{@http_port}"
+      request.upload_uri = "http://127.0.0.1:#{@http_port}"
 
       expect_error(request, /Failed uploading/)
     end
@@ -77,19 +77,30 @@ describe VCAP::Stager::Task do
   def create_request(app_name, app_props = {})
     ruby18_version =  ENV["VCAP_RUNTIME_RUBY18_VER"] || "1.8.7"
     ruby18_exec =  ENV["VCAP_RUNTIME_RUBY18"] || "/usr/bin/ruby"
-    { "download_uri" => DummyHandler.app_download_uri(@http_server, app_name),
-      "upload_uri" => DummyHandler.droplet_upload_uri(@http_server, app_name),
-      "properties" => {
-        "framework_info" => {"name" => "sinatra", "runtimes" => ["ruby18" => {"default" => true}],
-                        "detection" => [{"*.rb" => "require 'sinatra'|require \"sinatra\""}]},
-        "runtime_info"   => {"name" => "ruby18", "version" => ruby18_version, "executable"=> ruby18_exec},
-        "services"  => [{}],
-        "resources" => {
-          "memory" => 128,
-          "disk"   => 1024,
-          "fds"    => 64,
-        }
-      }.merge(app_props),
-    }
+    properties = {
+      "framework_info" => {"name" => "sinatra", "runtimes" => ["ruby18" => {"default" => true}],
+        "detection" => [{"*.rb" => "require 'sinatra'|require \"sinatra\""}]},
+      "runtime_info"   => {"name" => "ruby18", "version" => ruby18_version, "executable"=> ruby18_exec},
+      "services"  => [],
+      "resources" => {
+        "memory" => 128,
+        "disk"   => 1024,
+        "fds"    => 64,
+      },
+      "environment" =>
+        Schemata::Staging.mock_message.properties['environment'],
+      "meta" =>
+        Schemata::Staging.mock_message.properties['meta'],
+      "framework" =>
+        Schemata::Staging.mock_message.properties['framework'],
+      "runtime" =>
+        Schemata::Staging.mock_message.properties['runtime'],
+    }.merge(app_props)
+
+    request = Schemata::Staging.mock_message
+    request.properties = properties
+    request.download_uri = DummyHandler.app_download_uri(@http_server, app_name)
+    request.upload_uri = DummyHandler.droplet_upload_uri(@http_server, app_name)
+    request
   end
 end
