@@ -1,4 +1,5 @@
 require 'nats/client'
+require "schemata/staging"
 require 'yajl'
 
 require 'vcap/component'
@@ -110,7 +111,7 @@ class VCAP::Stager::Server
     begin
       @logger.debug("Decoding request '#{encoded_request}'")
 
-      request = Yajl::Parser.parse(encoded_request)
+      request = Schemata::Staging::Message.decode(encoded_request)
     rescue => e
       @logger.warn("Failed decoding '#{encoded_request}': #{e}")
       @logger.warn(e)

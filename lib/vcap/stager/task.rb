@@ -39,13 +39,13 @@ class VCAP::Stager::Task
   end
 
   def enqueue(queue)
-    @nats.publish("vcap.stager.#{queue}", Yajl::Encoder.encode(@request))
+    @nats.publish("vcap.stager.#{queue}", @request.encode)
   end
 
   # Attempts to stage the application and upload the result to the specified
   # endpoint.
   def perform
-    @logger.info("Starting task for request: #{@request}")
+    @logger.info("Starting task for request: #{@request.encode}")
 
     @task_logger.info("Setting up temporary directories")
     workspace = VCAP::Stager::Workspace.create
@@ -81,7 +81,7 @@ class VCAP::Stager::Task
   def download_app(app_path)
     cfg_file = Tempfile.new("curl_dl_config")
 
-    write_curl_config(@request["download_uri"], cfg_file.path,
+    write_curl_config(@request.download_uri, cfg_file.path,
                       "output" => app_path)
 
     # Show errors but not progress, fail on non-200
@@ -109,7 +109,7 @@ class VCAP::Stager::Task
     plugin_config = {
       "source_dir"   => src_dir,
       "dest_dir"     => dst_dir,
-      "environment"  => @request["properties"]
+      "environment"  => @request.properties
     }
 
     secure_user = nil
@@ -126,7 +126,7 @@ class VCAP::Stager::Task
     StagingPlugin::Config.to_file(plugin_config, plugin_config_file.path)
 
     cmd = [@ruby_path, @run_plugin_path,
-           @request["properties"]["framework_info"]["name"],
+           @request.properties["framework_info"]["name"],
            plugin_config_file.path].join(" ")
 
     res = @runner.run_logged(cmd,
@@ -169,7 +169,7 @@ class VCAP::Stager::Task
   def upload_droplet(droplet_path)
     cfg_file = Tempfile.new("curl_ul_config")
 
-    write_curl_config(@request["upload_uri"], cfg_file.path,
+    write_curl_config(@request.upload_uri, cfg_file.path,
                       "form" => "upload[droplet]=@#{droplet_path}")
 
     # Show errors but not progress, fail on non-200
