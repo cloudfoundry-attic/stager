@@ -1,7 +1,7 @@
 def zip_app(dir, app_name)
   app_source_dir = fixture_path('apps', app_name, 'source')
   target_path = File.join(dir, "#{app_name}.zip")
-  VCAP::Subprocess.run("cd #{app_source_dir}; zip -q -y #{target_path} -r *")
+  VCAP::Subprocess.run("cd #{app_source_dir}; zip -q -y #{target_path} -r .* *")
   target_path
 end
 

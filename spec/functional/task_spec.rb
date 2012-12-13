@@ -58,12 +58,17 @@ describe VCAP::Stager::Task do
     it "should return nil on success" do
       app_name = "sinatra_trivial"
       app_path = zip_app(@work_dir, app_name)
+      app_tarball_path = File.join(@work_dir, "#{app_name}.tgz")
+
       request = create_request(app_name)
       task = VCAP::Stager::Task.new(request)
 
       task.perform.should be_nil
 
-      File.exist?(File.join(@work_dir, "#{app_name}.tgz")).should be_true
+      File.exist?(app_tarball_path).should be_true
+      files = `tar -ztvf #{app_tarball_path}`
+      files.should match(/app\.rb/)
+      files.should match(/hidden_file_in_droplet/)
     end
   end
 
